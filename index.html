@@ -4,49 +4,65 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Proposal Dashboard: AdDRRA Final Evaluation</title>
-    <!-- Chosen Palette: Professional Blue & Neutral Gray -->
-    <!-- Application Structure Plan: The SPA is designed as a single-page dashboard for the evaluation committee (PRC/GRC). The Information Architecture is user-centric, guiding the user through a logical assessment flow: 1) Overview (Key Stats), 2) TOR Alignment (Interactive compliance check), 3) Methodology (Interactive deep-dive), 4) Workplan (Visual timeline), 5) Budget & Value (Financial charts & value-add highlight), 6) Consultant Profile. This structure prioritizes answering the committee's key questions ("Is it compliant?", "How?", "When?", "How much?") over mirroring the source document layouts. -->
-    <!-- Visualization & Content Choices: 
-        - Overview: HTML Stat Cards (Goal: Inform) - Quickly present the proposal's key numbers.
-        - TOR Alignment: Interactive HTML Accordion (Goal: Compare/Organize) - Allows users to directly compare TOR requirements vs. proposal promises. High-impact interaction.
-        - Methodology: JS-powered Tabs (Goal: Organize/Inform) - Simplifies complex concepts (OECD-DAC, Principles) into digestible, clickable sections.
-        - Workplan: Chart.js Horizontal Bar Chart (Goal: Change/Inform) - Visually represents the 25-day timeline and phase durations.
-        - Budget: Chart.js Doughnut Chart (Goal: Inform/Compare) - Shows the P450k budget breakdown. A separate HTML Stat Card highlights the P100k value-add to make it unmissable.
-        - Consultant Profile: Includes uploaded icon/image next to the name for visual emphasis of credentials.
-        - All text content is stored in a JS object (`appData`) for easy management and dynamic updates.
-    -->
-    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    
+    <!-- FAVICON ICON -->
+    <link rel="icon" type="image/png" href="uploaded:7d6dd19253a23b01088d8f6991b4b69e.png" />
+
+    <!-- Google Fonts for improved styling -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Poppins:wght@600&family=Roboto+Condensed:wght@500&display=swap" rel="stylesheet">
+    
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        // Custom Tailwind Configuration to use the imported fonts
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'title': ['Montserrat', 'sans-serif'], // Titles (h1, h2)
+                        'subtitle': ['Poppins', 'sans-serif'], // Subtitles and important text (h3, lead text)
+                        'body': ['Roboto Condensed', 'sans-serif'], // Body text
+                    },
+                },
+            },
+        };
+    </script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
+        /* Base font for the entire body */
+        body {
+            font-family: 'Roboto Condensed', sans-serif;
+            font-weight: 500; /* medium */
+        }
+        /* Specific override for navigation links */
         .nav-link {
             transition: all 0.3s ease;
             border-bottom: 3px solid transparent;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600; /* semi-bold */
         }
         .nav-link.active {
             border-bottom-color: #1e3a8a;
             color: #1e3a8a;
-            font-weight: 600;
         }
     </style>
 </head>
-<body class="bg-gray-100 font-sans text-gray-800">
+<body class="bg-gray-100 font-body text-gray-800">
 
     <!-- Header & Navigation -->
     <header class="sticky top-0 bg-white shadow-md z-50">
         <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-16">
                 <div class="flex-shrink-0 flex items-center">
-                    <span class="text-xl font-bold text-blue-900">Proposal Dashboard</span>
+                    <span class="text-xl font-title font-bold text-blue-900">Proposal Dashboard</span>
                 </div>
                 <div class="hidden sm:block sm:ml-6">
                     <div class="flex space-x-4">
-                        <a href="#overview" class="nav-link text-gray-600 hover:text-blue-900 px-3 py-2 rounded-md text-sm font-medium" data-section="overview">Overview</a>
-                        <a href="#alignment" class="nav-link text-gray-600 hover:text-blue-900 px-3 py-2 rounded-md text-sm font-medium" data-section="alignment">TOR Alignment</a>
-                        <a href="#methodology" class="nav-link text-gray-600 hover:text-blue-900 px-3 py-2 rounded-md text-sm font-medium" data-section="methodology">Methodology</a>
-                        <a href="#workplan" class="nav-link text-gray-600 hover:text-blue-900 px-3 py-2 rounded-md text-sm font-medium" data-section="workplan">Workplan</a>
-                        <a href="#budget" class="nav-link text-gray-600 hover:text-blue-900 px-3 py-2 rounded-md text-sm font-medium" data-section="budget">Budget & Value</a>
-                        <a href="#profile" class="nav-link text-gray-600 hover:text-blue-900 px-3 py-2 rounded-md text-sm font-medium" data-section="profile">Consultant Profile</a>
+                        <a href="#overview" class="nav-link text-gray-600 hover:text-blue-900 px-3 py-2 rounded-md text-sm" data-section="overview">Overview</a>
+                        <a href="#alignment" class="nav-link text-gray-600 hover:text-blue-900 px-3 py-2 rounded-md text-sm" data-section="alignment">TOR Alignment</a>
+                        <a href="#methodology" class="nav-link text-gray-600 hover:text-blue-900 px-3 py-2 rounded-md text-sm" data-section="methodology">Methodology</a>
+                        <a href="#workplan" class="nav-link text-gray-600 hover:text-blue-900 px-3 py-2 rounded-md text-sm" data-section="workplan">Workplan</a>
+                        <a href="#budget" class="nav-link text-gray-600 hover:text-blue-900 px-3 py-2 rounded-md text-sm" data-section="budget">Budget & Value</a>
+                        <a href="#profile" class="nav-link text-gray-600 hover:text-blue-900 px-3 py-2 rounded-md text-sm" data-section="profile">Consultant Profile</a>
                     </div>
                 </div>
             </div>
@@ -57,23 +73,23 @@
 
         <!-- Section 1: Overview -->
         <section id="overview" class="mb-12 pt-16 -mt-16">
-            <h1 class="text-4xl font-bold text-blue-900 mb-2">Final Evaluation: AdDRRA Project</h1>
-            <p class="text-lg text-gray-600 mb-6">An interactive dashboard summarizing the proposal submitted by Alvin M. Silva, MDM.</p>
+            <h1 class="text-4xl font-title font-bold text-blue-900 mb-2">Final Evaluation: AdDRRA Project</h1>
+            <p class="text-lg font-subtitle text-gray-600 mb-6">An interactive dashboard summarizing the proposal submitted by Alvin M. Silva, MDM.</p>
             
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div class="bg-white p-6 rounded-xl shadow-lg border-l-4 border-blue-800">
-                    <div class="text-sm font-medium text-gray-500 uppercase">Total Duration</div>
-                    <div class="text-4xl font-bold text-blue-900 mt-2">25 Days</div>
+                    <div class="text-sm font-subtitle text-gray-500 uppercase">Total Duration</div>
+                    <div class="text-4xl font-title font-bold text-blue-900 mt-2">25 Days</div>
                     <p class="text-gray-600 mt-1">Fully compliant with TOR timeline.</p>
                 </div>
                 <div class="bg-white p-6 rounded-xl shadow-lg border-l-4 border-blue-800">
-                    <div class="text-sm font-medium text-gray-500 uppercase">PRC-Funded Budget</div>
-                    <div class="text-4xl font-bold text-blue-900 mt-2">P450,000</div>
+                    <div class="text-sm font-subtitle text-gray-500 uppercase">PRC-Funded Budget</div>
+                    <div class="text-4xl font-title font-bold text-blue-900 mt-2">P450,000</div>
                     <p class="text-gray-600 mt-1">All-inclusive professional fees & support costs.</p>
                 </div>
                 <div class="bg-green-600 text-white p-6 rounded-xl shadow-lg">
-                    <div class="text-sm font-medium text-green-100 uppercase">In-Kind Value Add</div>
-                    <div class="text-4xl font-bold mt-2">P100,000</div>
+                    <div class="text-sm font-subtitle text-green-100 uppercase">In-Kind Value Add</div>
+                    <div class="text-4xl font-title font-bold mt-2">P100,000</div>
                     <p class="text-green-50 mt-1">Consultant-funded Digital Dashboard.</p>
                 </div>
             </div>
@@ -81,8 +97,8 @@
 
         <!-- Section 2: TOR Alignment -->
         <section id="alignment" class="mb-12 pt-16 -mt-16">
-            <h2 class="text-3xl font-bold text-blue-900 mb-4">Interactive TOR Alignment</h2>
-            <p class="text-gray-600 mb-6">This section directly compares the project's Terms of Reference (ToR) against the consultant's proposal, demonstrating 1:1 compliance with all key requirements. Click each item to view details.</p>
+            <h2 class="text-3xl font-title font-bold text-blue-900 mb-4">Interactive TOR Alignment</h2>
+            <p class="text-lg font-subtitle text-gray-600 mb-6">This section directly compares the project's Terms of Reference (ToR) against the consultant's proposal, demonstrating 1:1 compliance with all key requirements. Click each item to view details.</p>
             
             <div class="space-y-4" id="alignment-container">
                 <!-- Alignment items will be dynamically inserted here by JavaScript -->
@@ -91,8 +107,8 @@
 
         <!-- Section 3: Methodology -->
         <section id="methodology" class="mb-12 pt-16 -mt-16">
-            <h2 class="text-3xl font-bold text-blue-900 mb-4">Evaluation Framework</h2>
-            <p class="text-gray-600 mb-6">The proposal is anchored in the OECD-DAC criteria and reinforced by key cross-cutting principles. Click the tabs below to explore each component of the analytical framework.</p>
+            <h2 class="text-3xl font-title font-bold text-blue-900 mb-4">Evaluation Framework</h2>
+            <p class="text-lg font-subtitle text-gray-600 mb-6">The proposal is anchored in the OECD-DAC criteria and reinforced by key cross-cutting principles. Click the tabs below to explore each component of the analytical framework.</p>
 
             <div class="flex space-x-1 rounded-t-lg overflow-hidden" id="methodology-tabs">
                 <!-- Methodology tabs will be dynamically inserted here -->
@@ -104,12 +120,12 @@
 
         <!-- Section 4: Workplan & Deliverables -->
         <section id="workplan" class="mb-12 pt-16 -mt-16">
-            <h2 class="text-3xl font-bold text-blue-900 mb-4">Workplan & Deliverables</h2>
-            <p class="text-gray-600 mb-6">The evaluation is structured into four distinct phases over 25 working days, culminating in the Final Report and a Validation Workshop.</p>
+            <h2 class="text-3xl font-title font-bold text-blue-900 mb-4">Workplan & Deliverables</h2>
+            <p class="text-lg font-subtitle text-gray-600 mb-6">The evaluation is structured into four distinct phases over 25 working days, culminating in the Final Report and a Validation Workshop.</p>
             
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
                 <div class="bg-white p-6 rounded-xl shadow-lg">
-                    <h3 class="text-xl font-semibold text-blue-900 mb-4">Key Deliverables</h3>
+                    <h3 class="text-xl font-subtitle font-semibold text-blue-900 mb-4">Key Deliverables</h3>
                     <ul class="space-y-3">
                         <li class="flex items-center">
                             <span class="flex-shrink-0 w-6 h-6 bg-blue-800 text-white text-sm font-bold rounded-full flex items-center justify-center mr-3">1</span>
@@ -130,7 +146,7 @@
                     </ul>
                 </div>
                 <div class="bg-white p-6 rounded-xl shadow-lg">
-                    <h3 class="text-xl font-semibold text-blue-900 mb-4">Evaluation Timeline (Working Days)</h3>
+                    <h3 class="text-xl font-subtitle font-semibold text-blue-900 mb-4">Evaluation Timeline (Working Days)</h3>
                     <div class="chart-container relative w-full h-64 max-h-[250px] max-w-2xl mx-auto">
                         <canvas id="timelineChart"></canvas>
                     </div>
@@ -140,20 +156,20 @@
 
         <!-- Section 5: Budget & Value-Add -->
         <section id="budget" class="mb-12 pt-16 -mt-16">
-            <h2 class="text-3xl font-bold text-blue-900 mb-4">Budget & Value Proposition</h2>
-            <p class="text-gray-600 mb-6">The proposal is fully compliant with the P450,000 budget and includes a significant consultant-funded in-kind contribution.</p>
+            <h2 class="text-3xl font-title font-bold text-blue-900 mb-4">Budget & Value Proposition</h2>
+            <p class="text-lg font-subtitle text-gray-600 mb-6">The proposal is fully compliant with the P450,000 budget and includes a significant consultant-funded in-kind contribution.</p>
             
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
                 <div class="bg-white p-6 rounded-xl shadow-lg">
-                    <h3 class="text-xl font-semibold text-blue-900 mb-4">PRC-Funded Budget Breakdown (P450k)</h3>
+                    <h3 class="text-xl font-subtitle font-semibold text-blue-900 mb-4">PRC-Funded Budget Breakdown (P450k)</h3>
                     <div class="chart-container relative w-full h-80 max-h-[350px] max-w-md mx-auto">
                         <canvas id="budgetChart"></canvas>
                     </div>
                 </div>
                 <div class="bg-green-700 text-white p-8 rounded-xl shadow-lg">
-                    <div class="text-sm font-medium text-green-100 uppercase">In-Kind Contribution</div>
-                    <div class="text-5xl font-bold mt-2">P100,000</div>
-                    <p class="text-xl text-green-50 mt-1 mb-4 font-semibold">Final Evaluation Dashboard</p>
+                    <div class="text-sm font-subtitle text-green-100 uppercase">In-Kind Contribution</div>
+                    <div class="text-5xl font-title font-bold mt-2">P100,000</div>
+                    <p class="text-xl font-subtitle text-green-50 mt-1 mb-4 font-semibold">Final Evaluation Dashboard</p>
                     <p class="text-green-100">"Development of a Final Evaluation Dashboard to visualize metrics and insights—enabling PRC and GRC to transform evaluation findings into actionable intelligence."</p>
                     <p class="text-green-100 mt-4 text-sm font-bold">— Consultant-Funded, No Cost to PRC/GRC</p>
                 </div>
@@ -162,29 +178,34 @@
 
         <!-- Section 6: Consultant Profile -->
         <section id="profile" class="mb-12 pt-16 -mt-16">
-            <h2 class="text-3xl font-bold text-blue-900 mb-4 flex items-center">
+            <h2 class="text-3xl font-title font-bold text-blue-900 mb-4 flex items-center">
                 Consultant Profile: Alvin M. Silva, MDM
                 <!-- Incorporated uploaded image for visual emphasis on credentials -->
                 <img src="uploaded:Screenshot 2025-11-14 at 08.20.53.png-fe46f1df-2562-4a19-9285-2096a7d79c5a" alt="Certified Expertise Icon" class="w-8 h-8 ml-3" onerror="this.onerror=null; this.src='https://placehold.co/50x50/3b82f6/ffffff?text=Icon'">
             </h2>
-            <p class="text-gray-600 mb-6">The proposal is backed by over 15 years of direct, relevant experience in DRR, AA, and conflict-sensitive evaluation in the Philippines.</p>
+            <p class="text-lg font-subtitle text-gray-600 mb-6">The proposal is backed by over 15 years of direct, relevant experience in DRR, AA, and conflict-sensitive evaluation in the Philippines.</p>
             
             <div class="bg-white p-8 rounded-xl shadow-lg">
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <div>
-                        <h3 class="text-lg font-semibold text-blue-900">Direct GRC/PRC Experience</h3>
+                        <h3 class="text-lg font-subtitle font-semibold text-blue-900">Direct GRC/PRC Experience</h3>
                         <p class="text-gray-600 mt-1">Lead Consultant for the Mid-Term Review of the **CONSENT DRR II Project** (2022), demonstrating existing familiarity with GRC/PRC systems and the Mindanao context.</p>
                     </div>
                     <div>
-                        <h3 class="text-lg font-semibold text-blue-900">Core Competencies</h3>
+                        <h3 class="text-lg font-subtitle font-semibold text-blue-900">Core Competencies</h3>
                         <p class="text-gray-600 mt-1">15+ years in DRR/CCA, Anticipatory Action, Participatory & Conflict-Sensitive Methods, Systems Thinking, and Data Visualization.</p>
                     </div>
                     <div>
-                        <h3 class="text-lg font-semibold text-blue-900">Certifications & Languages</h3>
+                        <h3 class="text-lg font-subtitle font-semibold text-blue-900">Certifications & Languages</h3>
                         <p class="text-gray-600 mt-1">INSSA-Certified Security Risk Management Professional. Fluent in English, Filipino (Tagalog), and working proficiency in Visayan.</p>
                     </div>
                 </div>
-                <div class="text-center mt-8">
+                <div class="text-center mt-8 space-x-4">
+                    <!-- New 'Explore Portfolio' button -->
+                    <a href="https://alvin-silva.aiwaapp.live/portfolio/" target="_blank" class="bg-blue-900 text-white font-semibold py-3 px-6 rounded-lg hover:bg-blue-700 transition-colors">
+                        Explore Portfolio
+                    </a>
+                    <!-- Updated 'Access Full Profile' button -->
                     <a href="https://alvin-silva.aiwaapp.live/about" target="_blank" class="bg-blue-800 text-white font-semibold py-3 px-6 rounded-lg hover:bg-blue-700 transition-colors">
                         Access the Full Profile
                     </a>
@@ -253,7 +274,7 @@
                     {
                         id: 'principles',
                         title: 'Cross-Cutting',
-                        content: 'The evaluation will be guided by key principles: 1) Conflict Sensitivity ("Do No Harm" analysis), 2) Gender & Inclusion (diverse representation), 3) Systems Thinking (analyzing relationships & bottlenecks), and 4) Institutional Learning (providing actionable recommendations).'
+                        content: 'The evaluation will be guided by key principles: 1) **Conflict Sensitivity** ("Do No Harm" analysis), 2) **Gender & Inclusion** (diverse representation), 3) **Systems Thinking** (analyzing relationships & bottlenecks), and 4) **Institutional Learning** (providing actionable recommendations).'
                     }
                 ],
                 timelineData: {
@@ -273,17 +294,17 @@
                     el.className = 'bg-white rounded-lg shadow-lg overflow-hidden';
                     el.innerHTML = `
                         <button class="alignment-toggle w-full flex justify-between items-center p-5 text-left">
-                            <h3 class="text-lg font-semibold text-blue-900">${item.title}</h3>
+                            <h3 class="text-lg font-subtitle font-semibold text-blue-900">${item.title}</h3>
                             <span class="toggle-icon text-blue-800 text-2xl font-thin">+</span>
                         </button>
                         <div class="toggle-content hidden p-6 border-t border-gray-200">
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div>
-                                    <h4 class="font-bold text-gray-500 text-sm uppercase mb-2">TOR Requirement</h4>
+                                    <h4 class="font-subtitle font-bold text-gray-500 text-sm uppercase mb-2">TOR Requirement</h4>
                                     <p class="text-gray-700 italic">"${item.tor}"</p>
                                 </div>
                                 <div>
-                                    <h4 class="font-bold text-green-700 text-sm uppercase mb-2">Proposal Alignment</h4>
+                                    <h4 class="font-subtitle font-bold text-green-700 text-sm uppercase mb-2">Proposal Alignment</h4>
                                     <p class="text-gray-700 italic">"${item.proposal}"</p>
                                 </div>
                             </div>
@@ -307,7 +328,7 @@
             if (tabsContainer && contentContainer) {
                 appData.methodology.forEach((tab, index) => {
                     const tabButton = document.createElement('button');
-                    tabButton.className = `method-tab py-3 px-5 font-semibold text-sm focus:outline-none ${index === 0 ? 'bg-white text-blue-900' : 'bg-gray-200 text-gray-600 hover:bg-gray-300'}`;
+                    tabButton.className = `method-tab py-3 px-5 font-subtitle font-semibold text-sm focus:outline-none ${index === 0 ? 'bg-white text-blue-900' : 'bg-gray-200 text-gray-600 hover:bg-gray-300'}`;
                     tabButton.textContent = tab.title;
                     tabButton.dataset.id = tab.id;
                     tabsContainer.appendChild(tabButton);
