@@ -1,0 +1,422 @@
+TYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proposal Dashboard: AdDRRA Final Evaluation</title>
+    <!-- Chosen Palette: Professional Blue & Neutral Gray -->
+    <!-- Application Structure Plan: The SPA is designed as a single-page dashboard for the evaluation committee (PRC/GRC). The Information Architecture is user-centric, guiding the user through a logical assessment flow: 1) Overview (Key Stats), 2) TOR Alignment (Interactive compliance check), 3) Methodology (Interactive deep-dive), 4) Workplan (Visual timeline), 5) Budget & Value (Financial charts & value-add highlight), 6) Consultant Profile. This structure prioritizes answering the committee's key questions ("Is it compliant?", "How?", "When?", "How much?") over mirroring the source document layouts. -->
+    <!-- Visualization & Content Choices: 
+        - Overview: HTML Stat Cards (Goal: Inform) - Quickly present the proposal's key numbers.
+        - TOR Alignment: Interactive HTML Accordion (Goal: Compare/Organize) - Allows users to directly compare TOR requirements vs. proposal promises. High-impact interaction.
+        - Methodology: JS-powered Tabs (Goal: Organize/Inform) - Simplifies complex concepts (OECD-DAC, Principles) into digestible, clickable sections.
+        - Workplan: Chart.js Horizontal Bar Chart (Goal: Change/Inform) - Visually represents the 25-day timeline and phase durations.
+        - Budget: Chart.js Doughnut Chart (Goal: Inform/Compare) - Shows the P450k budget breakdown. A separate HTML Stat Card highlights the P100k value-add to make it unmissable.
+        - Consultant Profile: Includes uploaded icon/image next to the name for visual emphasis of credentials.
+        - All text content is stored in a JS object (`appData`) for easy management and dynamic updates.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .nav-link {
+            transition: all 0.3s ease;
+            border-bottom: 3px solid transparent;
+        }
+        .nav-link.active {
+            border-bottom-color: #1e3a8a;
+            color: #1e3a8a;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 font-sans text-gray-800">
+
+    <!-- Header & Navigation -->
+    <header class="sticky top-0 bg-white shadow-md z-50">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex-shrink-0 flex items-center">
+                    <span class="text-xl font-bold text-blue-900">Proposal Dashboard</span>
+                </div>
+                <div class="hidden sm:block sm:ml-6">
+                    <div class="flex space-x-4">
+                        <a href="#overview" class="nav-link text-gray-600 hover:text-blue-900 px-3 py-2 rounded-md text-sm font-medium" data-section="overview">Overview</a>
+                        <a href="#alignment" class="nav-link text-gray-600 hover:text-blue-900 px-3 py-2 rounded-md text-sm font-medium" data-section="alignment">TOR Alignment</a>
+                        <a href="#methodology" class="nav-link text-gray-600 hover:text-blue-900 px-3 py-2 rounded-md text-sm font-medium" data-section="methodology">Methodology</a>
+                        <a href="#workplan" class="nav-link text-gray-600 hover:text-blue-900 px-3 py-2 rounded-md text-sm font-medium" data-section="workplan">Workplan</a>
+                        <a href="#budget" class="nav-link text-gray-600 hover:text-blue-900 px-3 py-2 rounded-md text-sm font-medium" data-section="budget">Budget & Value</a>
+                        <a href="#profile" class="nav-link text-gray-600 hover:text-blue-900 px-3 py-2 rounded-md text-sm font-medium" data-section="profile">Consultant Profile</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8">
+
+        <!-- Section 1: Overview -->
+        <section id="overview" class="mb-12 pt-16 -mt-16">
+            <h1 class="text-4xl font-bold text-blue-900 mb-2">Final Evaluation: AdDRRA Project</h1>
+            <p class="text-lg text-gray-600 mb-6">An interactive dashboard summarizing the proposal submitted by Alvin M. Silva, MDM.</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="bg-white p-6 rounded-xl shadow-lg border-l-4 border-blue-800">
+                    <div class="text-sm font-medium text-gray-500 uppercase">Total Duration</div>
+                    <div class="text-4xl font-bold text-blue-900 mt-2">25 Days</div>
+                    <p class="text-gray-600 mt-1">Fully compliant with TOR timeline.</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-lg border-l-4 border-blue-800">
+                    <div class="text-sm font-medium text-gray-500 uppercase">PRC-Funded Budget</div>
+                    <div class="text-4xl font-bold text-blue-900 mt-2">P450,000</div>
+                    <p class="text-gray-600 mt-1">All-inclusive professional fees & support costs.</p>
+                </div>
+                <div class="bg-green-600 text-white p-6 rounded-xl shadow-lg">
+                    <div class="text-sm font-medium text-green-100 uppercase">In-Kind Value Add</div>
+                    <div class="text-4xl font-bold mt-2">P100,000</div>
+                    <p class="text-green-50 mt-1">Consultant-funded Digital Dashboard.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2: TOR Alignment -->
+        <section id="alignment" class="mb-12 pt-16 -mt-16">
+            <h2 class="text-3xl font-bold text-blue-900 mb-4">Interactive TOR Alignment</h2>
+            <p class="text-gray-600 mb-6">This section directly compares the project's Terms of Reference (ToR) against the consultant's proposal, demonstrating 1:1 compliance with all key requirements. Click each item to view details.</p>
+            
+            <div class="space-y-4" id="alignment-container">
+                <!-- Alignment items will be dynamically inserted here by JavaScript -->
+            </div>
+        </section>
+
+        <!-- Section 3: Methodology -->
+        <section id="methodology" class="mb-12 pt-16 -mt-16">
+            <h2 class="text-3xl font-bold text-blue-900 mb-4">Evaluation Framework</h2>
+            <p class="text-gray-600 mb-6">The proposal is anchored in the OECD-DAC criteria and reinforced by key cross-cutting principles. Click the tabs below to explore each component of the analytical framework.</p>
+
+            <div class="flex space-x-1 rounded-t-lg overflow-hidden" id="methodology-tabs">
+                <!-- Methodology tabs will be dynamically inserted here -->
+            </div>
+            <div class="bg-white p-6 rounded-b-lg rounded-tr-lg shadow-lg" id="methodology-content">
+                <!-- Methodology content will be updated here -->
+            </div>
+        </section>
+
+        <!-- Section 4: Workplan & Deliverables -->
+        <section id="workplan" class="mb-12 pt-16 -mt-16">
+            <h2 class="text-3xl font-bold text-blue-900 mb-4">Workplan & Deliverables</h2>
+            <p class="text-gray-600 mb-6">The evaluation is structured into four distinct phases over 25 working days, culminating in the Final Report and a Validation Workshop.</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                <div class="bg-white p-6 rounded-xl shadow-lg">
+                    <h3 class="text-xl font-semibold text-blue-900 mb-4">Key Deliverables</h3>
+                    <ul class="space-y-3">
+                        <li class="flex items-center">
+                            <span class="flex-shrink-0 w-6 h-6 bg-blue-800 text-white text-sm font-bold rounded-full flex items-center justify-center mr-3">1</span>
+                            Inception Report (max 5 pages)
+                        </li>
+                        <li class="flex items-center">
+                            <span class="flex-shrink-0 w-6 h-6 bg-blue-800 text-white text-sm font-bold rounded-full flex items-center justify-center mr-3">2</span>
+                            Preliminary Report & Findings
+                        </li>
+                        <li class="flex items-center">
+                            <span class="flex-shrink-0 w-6 h-6 bg-blue-800 text-white text-sm font-bold rounded-full flex items-center justify-center mr-3">3</span>
+                            Facilitation of Validation Workshop
+                        </li>
+                        <li class="flex items-center">
+                            <span class="flex-shrink-0 w-6 h-6 bg-blue-800 text-white text-sm font-bold rounded-full flex items-center justify-center mr-3">4</span>
+                            Final Evaluation Report & Presentation
+                        </li>
+                    </ul>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-lg">
+                    <h3 class="text-xl font-semibold text-blue-900 mb-4">Evaluation Timeline (Working Days)</h3>
+                    <div class="chart-container relative w-full h-64 max-h-[250px] max-w-2xl mx-auto">
+                        <canvas id="timelineChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 5: Budget & Value-Add -->
+        <section id="budget" class="mb-12 pt-16 -mt-16">
+            <h2 class="text-3xl font-bold text-blue-900 mb-4">Budget & Value Proposition</h2>
+            <p class="text-gray-600 mb-6">The proposal is fully compliant with the P450,000 budget and includes a significant consultant-funded in-kind contribution.</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                <div class="bg-white p-6 rounded-xl shadow-lg">
+                    <h3 class="text-xl font-semibold text-blue-900 mb-4">PRC-Funded Budget Breakdown (P450k)</h3>
+                    <div class="chart-container relative w-full h-80 max-h-[350px] max-w-md mx-auto">
+                        <canvas id="budgetChart"></canvas>
+                    </div>
+                </div>
+                <div class="bg-green-700 text-white p-8 rounded-xl shadow-lg">
+                    <div class="text-sm font-medium text-green-100 uppercase">In-Kind Contribution</div>
+                    <div class="text-5xl font-bold mt-2">P100,000</div>
+                    <p class="text-xl text-green-50 mt-1 mb-4 font-semibold">Final Evaluation Dashboard</p>
+                    <p class="text-green-100">"Development of a Final Evaluation Dashboard to visualize metrics and insights—enabling PRC and GRC to transform evaluation findings into actionable intelligence."</p>
+                    <p class="text-green-100 mt-4 text-sm font-bold">— Consultant-Funded, No Cost to PRC/GRC</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 6: Consultant Profile -->
+        <section id="profile" class="mb-12 pt-16 -mt-16">
+            <h2 class="text-3xl font-bold text-blue-900 mb-4 flex items-center">
+                Consultant Profile: Alvin M. Silva, MDM
+                <!-- Incorporated uploaded image for visual emphasis on credentials -->
+                <img src="uploaded:Screenshot 2025-11-14 at 08.20.53.png-fe46f1df-2562-4a19-9285-2096a7d79c5a" alt="Certified Expertise Icon" class="w-8 h-8 ml-3" onerror="this.onerror=null; this.src='https://placehold.co/50x50/3b82f6/ffffff?text=Icon'">
+            </h2>
+            <p class="text-gray-600 mb-6">The proposal is backed by over 15 years of direct, relevant experience in DRR, AA, and conflict-sensitive evaluation in the Philippines.</p>
+            
+            <div class="bg-white p-8 rounded-xl shadow-lg">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div>
+                        <h3 class="text-lg font-semibold text-blue-900">Direct GRC/PRC Experience</h3>
+                        <p class="text-gray-600 mt-1">Lead Consultant for the Mid-Term Review of the **CONSENT DRR II Project** (2022), demonstrating existing familiarity with GRC/PRC systems and the Mindanao context.</p>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-semibold text-blue-900">Core Competencies</h3>
+                        <p class="text-gray-600 mt-1">15+ years in DRR/CCA, Anticipatory Action, Participatory & Conflict-Sensitive Methods, Systems Thinking, and Data Visualization.</p>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-semibold text-blue-900">Certifications & Languages</h3>
+                        <p class="text-gray-600 mt-1">INSSA-Certified Security Risk Management Professional. Fluent in English, Filipino (Tagalog), and working proficiency in Visayan.</p>
+                    </div>
+                </div>
+                <div class="text-center mt-8">
+                    <a href="https://alvin-silva.aiwaapp.live/about" target="_blank" class="bg-blue-800 text-white font-semibold py-3 px-6 rounded-lg hover:bg-blue-700 transition-colors">
+                        Access the Full Profile
+                    </a>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="text-center p-6 bg-gray-200 text-gray-600 text-sm mt-12">
+        <p>This is an interactive dashboard representation of the proposal submitted by Alvin M. Silva.</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            const appData = {
+                alignment: [
+                    {
+                        title: "Evaluation Criteria",
+                        tor: "The evaluation will be based on the OECD-DAC criteria (Relevance, Effectiveness, Efficiency, Sustainability).",
+                        proposal: "The proposed evaluation approach is fully aligned with the OECD-DAC criteria... and will form the core of the analytical framework."
+                    },
+                    {
+                        title: "Duration & Timeline",
+                        tor: "The duration of the assignment will be up to 25 working days within September-December 2025.",
+                        proposal: "Total duration: 25 working days (October-December 2025). The consultant confirms full availability within this period."
+                    },
+                    {
+                        title: "Key Deliverables",
+                        tor: "Deliverables include: Inception Report, Preliminary Report, Validation Workshop, Final Report.",
+                        proposal: "Expected Deliverables: Inception Report, Preliminary Report, Facilitation of Validation Workshop, Final Evaluation Report. All deliverables will be in English."
+                    },
+                    {
+                        title: "Budget & Logistics",
+                        tor: "Consultants must quote in PHP. Logistics (travel, accommodation, transport) do not need to be quoted and will be borne by the PRC.",
+                        proposal: "Currency: Philippine Peso (PHP). Total PRC-Funded: P450,000. Logistics (travel, accommodation, and transport) will be arranged and funded by PRC."
+                    },
+                    {
+                        title: "Consultant Experience",
+                        tor: "Requires 4+ years in DRR/AA evaluation, knowledge of PH context, GFFO/GRC, and conflict-sensitive areas.",
+                        proposal: "15+ years in DRR/AA. Direct GRC/PRC experience (CONSENT DRR II Project, 2022). Proven expertise in participatory and conflict-sensitive evaluation methods."
+                    }
+                ],
+                methodology: [
+                    {
+                        id: 'relevance',
+                        title: 'Relevance',
+                        content: 'Assessment of the project\'s alignment with the needs, priorities, and capacities of target communities, especially in fragile and conflict-affected contexts. It also checks alignment with PRC, GRC, and GFFO humanitarian strategies.'
+                    },
+                    {
+                        id: 'effectiveness',
+                        title: 'Effectiveness',
+                        content: 'Analysis of the degree to which project outputs and outcomes were achieved as intended. This includes the successful setup, testing, and activation of Early Action Protocols (EAPs) and their institutionalization within PRC.'
+                    },
+                    {
+                        id: 'efficiency',
+                        title: 'Efficiency',
+                        content: 'Measurement of how economically resources (human, financial, institutional) were converted into results. This will assess the timeliness of activities and the cost-benefit of the AA interventions.'
+                    },
+                    {
+                        id: 'sustainability',
+                        title: 'Sustainability',
+                        content: 'Evaluation of the likelihood of project benefits continuing after donor support ends. This focuses on local ownership, institutional capacity of PRC, and the integration of AA into government mechanisms.'
+                    },
+                    {
+                        id: 'principles',
+                        title: 'Cross-Cutting',
+                        content: 'The evaluation will be guided by key principles: 1) **Conflict Sensitivity** ("Do No Harm" analysis), 2) **Gender & Inclusion** (diverse representation), 3) **Systems Thinking** (analyzing relationships & bottlenecks), and 4) **Institutional Learning** (providing actionable recommendations).'
+                    }
+                ],
+                timelineData: {
+                    labels: ['Phase 1: Inception', 'Phase 2: Field Work', 'Phase 3: Analysis', 'Phase 4: Finalization'],
+                    data: [3, 10, 5, 11]
+                },
+                budgetData: {
+                    labels: ['Professional Fees (P400k)', 'Research Support (P25k)', 'Comm. & Admin. (P20k)', 'Contingency (P5k)'],
+                    data: [400000, 25000, 20000, 5000]
+                }
+            };
+
+            const alignmentContainer = document.getElementById('alignment-container');
+            if (alignmentContainer) {
+                appData.alignment.forEach((item, index) => {
+                    const el = document.createElement('div');
+                    el.className = 'bg-white rounded-lg shadow-lg overflow-hidden';
+                    el.innerHTML = `
+                        <button class="alignment-toggle w-full flex justify-between items-center p-5 text-left">
+                            <h3 class="text-lg font-semibold text-blue-900">${item.title}</h3>
+                            <span class="toggle-icon text-blue-800 text-2xl font-thin">+</span>
+                        </button>
+                        <div class="toggle-content hidden p-6 border-t border-gray-200">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <h4 class="font-bold text-gray-500 text-sm uppercase mb-2">TOR Requirement</h4>
+                                    <p class="text-gray-700 italic">"${item.tor}"</p>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-green-700 text-sm uppercase mb-2">Proposal Alignment</h4>
+                                    <p class="text-gray-700 italic">"${item.proposal}"</p>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    alignmentContainer.appendChild(el);
+                });
+
+                document.querySelectorAll('.alignment-toggle').forEach(button => {
+                    button.addEventListener('click', () => {
+                        const content = button.nextElementSibling;
+                        const icon = button.querySelector('.toggle-icon');
+                        content.classList.toggle('hidden');
+                        icon.textContent = content.classList.contains('hidden') ? '+' : '−';
+                    });
+                });
+            }
+
+            const tabsContainer = document.getElementById('methodology-tabs');
+            const contentContainer = document.getElementById('methodology-content');
+            if (tabsContainer && contentContainer) {
+                appData.methodology.forEach((tab, index) => {
+                    const tabButton = document.createElement('button');
+                    tabButton.className = `method-tab py-3 px-5 font-semibold text-sm focus:outline-none ${index === 0 ? 'bg-white text-blue-900' : 'bg-gray-200 text-gray-600 hover:bg-gray-300'}`;
+                    tabButton.textContent = tab.title;
+                    tabButton.dataset.id = tab.id;
+                    tabsContainer.appendChild(tabButton);
+                });
+
+                const updateTabs = (selectedId) => {
+                    document.querySelectorAll('.method-tab').forEach(tab => {
+                        if (tab.dataset.id === selectedId) {
+                            tab.classList.add('bg-white', 'text-blue-900');
+                            tab.classList.remove('bg-gray-200', 'text-gray-600', 'hover:bg-gray-300');
+                        } else {
+                            tab.classList.remove('bg-white', 'text-blue-900');
+                            tab.classList.add('bg-gray-200', 'text-gray-600', 'hover:bg-gray-300');
+                        }
+                    });
+                    const content = appData.methodology.find(t => t.id === selectedId).content;
+                    contentContainer.innerHTML = `<p class="text-gray-700 leading-relaxed">${content}</p>`;
+                };
+
+                tabsContainer.addEventListener('click', (e) => {
+                    if (e.target.classList.contains('method-tab')) {
+                        updateTabs(e.target.dataset.id);
+                    }
+                });
+
+                updateTabs(appData.methodology[0].id);
+            }
+
+            const timelineCtx = document.getElementById('timelineChart');
+            if (timelineCtx) {
+                new Chart(timelineCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: appData.timelineData.labels,
+                        datasets: [{
+                            label: 'Working Days',
+                            data: appData.timelineData.data,
+                            backgroundColor: ['#3b82f6', '#1d4ed8', '#1e3a8a', '#172554'],
+                            borderWidth: 0
+                        }]
+                    },
+                    options: {
+                        indexAxis: 'y',
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { display: false },
+                            tooltip: {
+                                callbacks: {
+                                    label: (context) => `${context.dataset.label}: ${context.raw} days`
+                                }
+                            }
+                        },
+                        scales: {
+                            x: {
+                                title: { display: true, text: 'Working Days' }
+                            },
+                            y: {
+                                grid: { display: false }
+                            }
+                        }
+                    }
+                });
+            }
+
+            const budgetCtx = document.getElementById('budgetChart');
+            if (budgetCtx) {
+                new Chart(budgetCtx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: appData.budgetData.labels,
+                        datasets: [{
+                            label: 'Cost',
+                            data: appData.budgetData.data,
+                            backgroundColor: ['#1e3a8a', '#3b82f6', '#60a5fa', '#93c5fd'],
+                            hoverOffset: 4
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { position: 'bottom' },
+                            tooltip: {
+                                callbacks: {
+                                    label: (context) => `${context.label}: P${context.raw.toLocaleString()}`
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+
+            const sections = document.querySelectorAll('section');
+            const navLinks = document.querySelectorAll('nav a.nav-link');
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        navLinks.forEach(link => {
+                            link.classList.toggle('active', link.dataset.section === entry.target.id);
+                        });
+                    }
+                });
+            }, { rootMargin: '-20% 0px -80% 0px', threshold: 0 });
+
+            sections.forEach(section => observer.observe(section));
+
+        });
+    </script>
+</body>
+</html>
